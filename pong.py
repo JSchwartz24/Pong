@@ -1,4 +1,6 @@
 import turtle
+import os
+import winsound
 
 wn = turtle.Screen()
 wn.title("Pong by Jason Schwartz")
@@ -95,10 +97,12 @@ while True:
     if ball.ycor() > 290:
         ball.sety(290)
         ball.dy *= -1
+        winsound.PlaySound("jump.wav", winsound.SND_ASYNC)
 
     if ball.ycor() < -290:
         ball.sety(-290)
         ball.dy *= -1
+        winsound.PlaySound("jump.wav", winsound.SND_ASYNC)
 
     if ball.xcor() > 390:
         ball.goto(0, 0)
@@ -110,6 +114,7 @@ while True:
             align="center",
             font=("Courier", 24, "normal"),
         )
+        winsound.PlaySound("point.wav", winsound.SND_ASYNC)
 
     if ball.xcor() < -390:
         ball.goto(0, 0)
@@ -121,6 +126,7 @@ while True:
             align="center",
             font=("Courier", 24, "normal"),
         )
+        winsound.PlaySound("point.wav", winsound.SND_ASYNC)
 
     # Paddle and ball collisions
     if (ball.xcor() > 340 and ball.xcor() < 350) and (
@@ -128,9 +134,24 @@ while True:
     ):
         ball.setx(340)
         ball.dx *= -1.2
+        winsound.PlaySound("jump.wav", winsound.SND_ASYNC)
 
     if (ball.xcor() < -340 and ball.xcor() > -350) and (
         ball.ycor() < paddle_a.ycor() + 40 and ball.ycor() > paddle_a.ycor() - 40
     ):
         ball.setx(-340)
         ball.dx *= -1.2
+        winsound.PlaySound("jump.wav", winsound.SND_ASYNC)
+        winsound.PlaySound("winner.wav", winsound.SND_ASYNC)
+
+    # End game state
+    if score_a == 5 or score_b == 5:
+        ball.goto(0, 0)
+        ball.dx = 0
+        ball.dy = 0
+
+        pen.clear()
+        if score_a == 5:
+            pen.write("Player A wins", align="center", font=("Courier", 24, "normal"))
+        else:
+            pen.write("Player B wins", align="center", font=("Courier", 24, "normal"))
